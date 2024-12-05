@@ -63,7 +63,9 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                             if (isComplete && !Array.from(completedSteps).includes(currentStep)) {
                                 debug && console.log("Onborda: Step Completed", step);
                                 setCompletedSteps((prev) => {
-                                    return prev.add(currentStep);
+                                    const newSet = new Set(prev);
+                                    newSet.add(currentStep);
+                                    return newSet;
                                 });
                                 // If callback is provided, call it
                                 step?.onComplete && step.onComplete();
@@ -71,8 +73,9 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                             else if (!isComplete && Array.from(completedSteps).includes(currentStep)) {
                                 debug && console.log("Onborda: Step Incomplete", step);
                                 setCompletedSteps((prev) => {
-                                    prev.delete(currentStep);
-                                    return prev;
+                                    const newSet = new Set(prev);
+                                    newSet.delete(currentStep);
+                                    return newSet;
                                 });
                             }
                         };
@@ -124,7 +127,9 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                                             if (isComplete && !Array.from(completedSteps).includes(currentStep)) {
                                                 debug && console.log("Onborda: Step Completed", step);
                                                 setCompletedSteps((prev) => {
-                                                    return prev.add(currentStep);
+                                                    const newSet = new Set(prev);
+                                                    newSet.add(currentStep);
+                                                    return newSet;
                                                 });
                                                 // If callback is provided, call it
                                                 step?.onComplete && step.onComplete();
@@ -132,8 +137,9 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                                             else if (!isComplete && Array.from(completedSteps).includes(currentStep)) {
                                                 debug && console.log("Onborda: Step Incomplete", step);
                                                 setCompletedSteps((prev) => {
-                                                    prev.delete(currentStep);
-                                                    return prev;
+                                                    const newSet = new Set(prev);
+                                                    newSet.delete(currentStep);
+                                                    return newSet;
                                                 });
                                             }
                                         };
@@ -192,7 +198,9 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                             // Mark the step as completed
                             step?.onComplete && step.onComplete();
                             setCompletedSteps((prev) => {
-                                return prev.add(currentStep);
+                                const newSet = new Set(prev);
+                                newSet.add(currentStep);
+                                return newSet;
                             });
                         }
                     }
@@ -200,7 +208,9 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                         // Mark the step as completed
                         step?.onComplete && step.onComplete();
                         setCompletedSteps((prev) => {
-                            return prev.add(currentStep);
+                            const newSet = new Set(prev);
+                            newSet.add(currentStep);
+                            return newSet;
                         });
                     }
                 }

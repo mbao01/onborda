@@ -89,7 +89,9 @@ const Onborda: React.FC<OnbordaProps> = ({
                             if (isComplete && !Array.from(completedSteps).includes(currentStep)) {
                                 debug && console.log("Onborda: Step Completed", step);
                                 setCompletedSteps((prev) => {
-                                    return prev.add(currentStep);
+                                    const newSet = new Set(prev);
+                                    newSet.add(currentStep);
+                                    return newSet;
                                 });
                                 // If callback is provided, call it
                                 step?.onComplete && step.onComplete();
@@ -98,8 +100,9 @@ const Onborda: React.FC<OnbordaProps> = ({
                             else if (!isComplete && Array.from(completedSteps).includes(currentStep)) {
                                 debug && console.log("Onborda: Step Incomplete", step);
                                 setCompletedSteps((prev) => {
-                                    prev.delete(currentStep);
-                                    return prev;
+                                    const newSet = new Set(prev);
+                                    newSet.delete(currentStep);
+                                    return newSet;
                                 });
                             }
                         }
@@ -160,7 +163,9 @@ const Onborda: React.FC<OnbordaProps> = ({
                                             if (isComplete && !Array.from(completedSteps).includes(currentStep)) {
                                                 debug && console.log("Onborda: Step Completed", step);
                                                 setCompletedSteps((prev) => {
-                                                    return prev.add(currentStep);
+                                                    const newSet = new Set(prev);
+                                                    newSet.add(currentStep);
+                                                    return newSet;
                                                 });
                                                 // If callback is provided, call it
                                                 step?.onComplete && step.onComplete();
@@ -169,8 +174,9 @@ const Onborda: React.FC<OnbordaProps> = ({
                                             else if (!isComplete && Array.from(completedSteps).includes(currentStep)) {
                                                 debug && console.log("Onborda: Step Incomplete", step);
                                                 setCompletedSteps((prev) => {
-                                                    prev.delete(currentStep);
-                                                    return prev;
+                                                    const newSet = new Set(prev);
+                                                    newSet.delete(currentStep);
+                                                    return newSet;
                                                 });
                                             }
                                         }
@@ -233,14 +239,18 @@ const Onborda: React.FC<OnbordaProps> = ({
                             // Mark the step as completed
                             step?.onComplete && step.onComplete();
                             setCompletedSteps((prev) => {
-                                return prev.add(currentStep);
+                                const newSet = new Set(prev);
+                                newSet.add(currentStep);
+                                return newSet;
                             });
                         }
                     }else {
                         // Mark the step as completed
                         step?.onComplete && step.onComplete();
                         setCompletedSteps((prev) => {
-                            return prev.add(currentStep);
+                            const newSet = new Set(prev);
+                            newSet.add(currentStep);
+                            return newSet;
                         });
                     }
 
