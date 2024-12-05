@@ -34,8 +34,8 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
     const path = usePathname();
     // Update the current route on route changes
     useEffect(() => {
-        setCurrentRoute(path);
-    }, [path]);
+        !pendingRouteChange && setCurrentRoute(path);
+    }, [path, pendingRouteChange]);
     // - -
     // Initialisze
     useEffect(() => {

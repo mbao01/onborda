@@ -56,8 +56,8 @@ const Onborda: React.FC<OnbordaProps> = ({
 
     // Update the current route on route changes
     useEffect(() => {
-        setCurrentRoute(path);
-    },[path])
+        !pendingRouteChange && setCurrentRoute(path);
+    },[path, pendingRouteChange])
 
     // - -
     // Initialisze
