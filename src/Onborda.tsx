@@ -113,24 +113,38 @@ const Onborda: React.FC<OnbordaProps> = ({
 
                         // Enable pointer events on the element
                         if (step.interactable) {
+                            // Current step should be interactable
                             const htmlElement = element as HTMLElement;
                             htmlElement.style.pointerEvents = "auto";
 
-                            // Add event listeners if the step is interactable and has conditions
+                            // If the step has complete conditions, we need to observe the element for changes
                             if (step?.isCompleteConditions) {
-                                element.addEventListener("click", handleInteraction);
-                                element.addEventListener("input", handleInteraction);
-                                element.addEventListener("change", handleInteraction);
-                                debug && console.log("Onborda: Added event listeners for element", element);
+                                // Check if the step has an observer selector, if not, use the focused element itself
+                                const eventListenerElements = step?.observerSelector ? document.querySelectorAll(step.observerSelector) : [element];
+                                const htmlElements = Array.from(eventListenerElements) as HTMLElement[];
 
-                                cleanup.push(() => {
-                                    // Cleanup the event listeners
-                                    element.removeEventListener("click", handleInteraction);
-                                    element.removeEventListener("input", handleInteraction);
-                                    element.removeEventListener("change", handleInteraction);
-                                    debug && console.log("Onborda: Removed event listeners for element", element);
+                                //create observer to check if the element to focus has changed
+                                const observer = new MutationObserver((mutations, observer) => {
+                                    debug && console.log("Onborda: Observer interaction Mutation", mutations);
+                                    handleInteraction();
                                 });
+
+                                //add the observer to the elements
+                                htmlElements.forEach((el) => {
+                                    debug && console.log("Onborda: Observer added to element", el);
+                                    //assign the observer to the element
+                                    observer.observe(el, {
+                                        childList: true,
+                                        subtree: true,
+                                    });
+                                    //cleanup the observer
+                                    cleanup.push(() => {
+                                        debug && console.log("Onborda: Observer disconnected from element", el);
+                                        observer.disconnect();
+                                    });
+                                })
                             }
+
                         }
                         elementFound = true;
                     }
@@ -410,16 +424,6 @@ const Onborda: React.FC<OnbordaProps> = ({
         <div data-name="onborda-site-wrapper" className={` ${pointerEvents} `}>
             {children}
         </div>
-
-        {/* Onborda Tour */}
-        {/*<div data-name={'onborda-tour-wrapper'}*/}
-        {/*     className={'fixed top-0 left-0 z-[999] w-screen h-screen pointer-events-none'}>*/}
-        {/*    {TourComponent && currentTourSteps && (*/}
-        {/*        <div data-name={'onborda-tour'} className={'pointer-events-auto'}>*/}
-        {/*            <TourComponent steps={currentTourSteps} currentTour={currentTour} currentStep={currentStep}/>*/}
-        {/*        </div>*/}
-        {/*    )}*/}
-        {/*</div>*/}
 
         {/* Onborda Overlay Step Content */}
         {pointerPosition && isOnbordaVisible && CardComponent && (

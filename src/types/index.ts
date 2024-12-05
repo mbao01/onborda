@@ -63,8 +63,10 @@ export interface Step {
     pointerRadius?: number;
     /** Flag to make the step interactable */
     interactable?: boolean;
-    /** Conditions to be met before the next step can be triggered. Function is bound to event listeners on the target element on 'input', 'change' and 'click' events. */
+    /** Conditions to be met before the next step can be triggered. Function is bound to on observer on the focused element, or observerSelector element if set. */
     isCompleteConditions?: (element: Element | null) => boolean;
+    /** Selector for Element/s that an observer is attached to listen for changes. Upon each observation, isCompleteConditions is triggered. */
+    observerSelector?: string;
 
     // Routing
     /** The route for this step */

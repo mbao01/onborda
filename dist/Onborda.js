@@ -83,20 +83,32 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                         handleInteraction();
                         // Enable pointer events on the element
                         if (step.interactable) {
+                            // Current step should be interactable
                             const htmlElement = element;
                             htmlElement.style.pointerEvents = "auto";
-                            // Add event listeners if the step is interactable and has conditions
+                            // If the step has complete conditions, we need to observe the element for changes
                             if (step?.isCompleteConditions) {
-                                element.addEventListener("click", handleInteraction);
-                                element.addEventListener("input", handleInteraction);
-                                element.addEventListener("change", handleInteraction);
-                                debug && console.log("Onborda: Added event listeners for element", element);
-                                cleanup.push(() => {
-                                    // Cleanup the event listeners
-                                    element.removeEventListener("click", handleInteraction);
-                                    element.removeEventListener("input", handleInteraction);
-                                    element.removeEventListener("change", handleInteraction);
-                                    debug && console.log("Onborda: Removed event listeners for element", element);
+                                // Check if the step has an observer selector, if not, use the focused element itself
+                                const eventListenerElements = step?.observerSelector ? document.querySelectorAll(step.observerSelector) : [element];
+                                const htmlElements = Array.from(eventListenerElements);
+                                //create observer to check if the element to focus has changed
+                                const observer = new MutationObserver((mutations, observer) => {
+                                    debug && console.log("Onborda: Observer interaction Mutation", mutations);
+                                    handleInteraction();
+                                });
+                                //add the observer to the elements
+                                htmlElements.forEach((el) => {
+                                    debug && console.log("Onborda: Observer added to element", el);
+                                    //assign the observer to the element
+                                    observer.observe(el, {
+                                        childList: true,
+                                        subtree: true,
+                                    });
+                                    //cleanup the observer
+                                    cleanup.push(() => {
+                                        debug && console.log("Onborda: Observer disconnected from element", el);
+                                        observer.disconnect();
+                                    });
                                 });
                             }
                         }
