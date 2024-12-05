@@ -28,6 +28,8 @@ export interface OnbordaContextType {
     startOnborda: (tourName: string) => void;
     /** flag to check if Onborda is visible */
     isOnbordaVisible: boolean;
+    /** function to set the visibility of Onborda */
+    setOnbordaVisible: (visible: boolean) => void;
     /** default completed steps */
     completedSteps: Set<number>;
     /** setstate function to set the completed steps */

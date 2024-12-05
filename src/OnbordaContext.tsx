@@ -121,6 +121,7 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
         closeOnborda,
         startOnborda,
         isOnbordaVisible,
+        setOnbordaVisible,
         completedSteps,
         setCompletedSteps
       }}

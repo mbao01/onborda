@@ -98,6 +98,7 @@ const OnbordaProvider = ({ children, tours = [], activeTour = null, }) => {
             closeOnborda,
             startOnborda,
             isOnbordaVisible,
+            setOnbordaVisible,
             completedSteps,
             setCompletedSteps
         }, children: children }));
