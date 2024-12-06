@@ -99,6 +99,8 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                                 //add the observer to the elements
                                 htmlElements.forEach((el) => {
                                     debug && console.log("Onborda: Observer added to element", el);
+                                    //add data attribute to the element
+                                    el.setAttribute("data-onborda-observed", "true");
                                     //assign the observer to the element
                                     observer.observe(el, {
                                         childList: true,
@@ -107,6 +109,7 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                                     //cleanup the observer
                                     cleanup.push(() => {
                                         debug && console.log("Onborda: Observer disconnected from element", el);
+                                        el.removeAttribute("data-onborda-observed");
                                         observer.disconnect();
                                     });
                                 });
