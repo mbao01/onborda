@@ -16,7 +16,11 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
     const [elementToScroll, setElementToScroll] = useState(null);
     const [pointerPosition, setPointerPosition] = useState(null);
     const currentElementRef = useRef(null);
-    const [currentRoute, setCurrentRoute] = useState(null);
+    // - -
+    // Route Changes
+    const router = useRouter();
+    const path = usePathname();
+    const [currentRoute, setCurrentRoute] = useState(path);
     const [pendingRouteChange, setPendingRouteChange] = useState(false);
     const hasSelector = (step) => {
         return !!step?.selector || !!step?.customQuerySelector;
@@ -28,10 +32,6 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
     const currentTourObject = useMemo(() => {
         return tours.find((tour) => tour.tour === currentTour);
     }, [currentTour, isOnbordaVisible]);
-    // - -
-    // Route Changes
-    const router = useRouter();
-    const path = usePathname();
     // Update the current route on route changes
     useEffect(() => {
         !pendingRouteChange && setCurrentRoute(path);
@@ -41,7 +41,7 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
     useEffect(() => {
         let cleanup = [];
         if (isOnbordaVisible && currentTourSteps) {
-            debug && console.log("Onborda: Current Step Changed", currentStep);
+            debug && console.log("Onborda: Current Step Changed", currentStep, completedSteps);
             const step = currentTourSteps[currentStep];
             if (step) {
                 let elementFound = false;
@@ -59,23 +59,16 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                         const handleInteraction = () => {
                             const isComplete = step?.isCompleteConditions?.(element) ?? true;
                             debug && console.log("Onborda: Step Interaction", step, isComplete);
-                            // Check if the step is complete based on the conditions, and not already marked as completed
-                            if (isComplete && !Array.from(completedSteps).includes(currentStep)) {
-                                debug && console.log("Onborda: Step Completed", step);
-                                setCompletedSteps((prev) => {
-                                    const newSet = new Set(prev);
-                                    newSet.add(currentStep);
-                                    return newSet;
-                                });
-                                // If callback is provided, call it
+                            if (isComplete && !completedSteps.has(currentStep)) {
+                                debug && console.log("Onborda: Step Completed", currentStep, step);
                                 step?.onComplete && step.onComplete();
-                            } // Check if the step is incomplete based on the conditions, and already marked as completed
-                            else if (!isComplete && Array.from(completedSteps).includes(currentStep)) {
-                                debug && console.log("Onborda: Step Incomplete", step);
+                                setCompletedSteps(completedSteps.add(currentStep));
+                            }
+                            else if (!isComplete && completedSteps.has(currentStep)) {
+                                debug && console.log("Onborda: Step Incomplete", currentStep, step);
                                 setCompletedSteps((prev) => {
-                                    const newSet = new Set(prev);
-                                    newSet.delete(currentStep);
-                                    return newSet;
+                                    prev.delete(currentStep);
+                                    return prev;
                                 });
                             }
                         };
@@ -135,31 +128,6 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                                         setPointerPosition(getElementPosition(element));
                                         setElementToScroll(element);
                                         currentElementRef.current = element;
-                                        const handleInteraction = () => {
-                                            const isComplete = step?.isCompleteConditions?.(element) ?? true;
-                                            debug && console.log("Onborda: Step Interaction", step, isComplete);
-                                            // Check if the step is complete based on the conditions, and not already marked as completed
-                                            if (isComplete && !Array.from(completedSteps).includes(currentStep)) {
-                                                debug && console.log("Onborda: Step Completed", step);
-                                                setCompletedSteps((prev) => {
-                                                    const newSet = new Set(prev);
-                                                    newSet.add(currentStep);
-                                                    return newSet;
-                                                });
-                                                // If callback is provided, call it
-                                                step?.onComplete && step.onComplete();
-                                            } // Check if the step is incomplete based on the conditions, and already marked as completed
-                                            else if (!isComplete && Array.from(completedSteps).includes(currentStep)) {
-                                                debug && console.log("Onborda: Step Incomplete", step);
-                                                setCompletedSteps((prev) => {
-                                                    const newSet = new Set(prev);
-                                                    newSet.delete(currentStep);
-                                                    return newSet;
-                                                });
-                                            }
-                                        };
-                                        // Initial check
-                                        handleInteraction();
                                         // Enable pointer events on the element
                                         if (step.interactable) {
                                             const htmlElement = element;
@@ -202,31 +170,16 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
                 }
                 else {
                     // no selector, but might still need to navigate to a route
-                    if (step.route) {
-                        // Check if the route is set and different from the current route
-                        if (currentRoute == null || !currentRoute?.endsWith(step.route)) {
-                            debug && console.log("Onborda: Navigating to route", step.route);
-                            // Trigger the next route
-                            router.push(step.route);
-                        }
-                        else {
-                            // Mark the step as completed
-                            step?.onComplete && step.onComplete();
-                            setCompletedSteps((prev) => {
-                                const newSet = new Set(prev);
-                                newSet.add(currentStep);
-                                return newSet;
-                            });
-                        }
+                    if (step.route && (currentRoute == null || !currentRoute?.endsWith(step.route))) {
+                        // Trigger the next route
+                        debug && console.log("Onborda: Navigating to route", step.route);
+                        router.push(step.route);
                     }
-                    else {
-                        // Mark the step as completed
+                    else if (!completedSteps.has(currentStep)) {
+                        // don't have a route to navigate to, but the step is not completed
+                        debug && console.log("Onborda: Step Completed via no selector", currentStep, step);
                         step?.onComplete && step.onComplete();
-                        setCompletedSteps((prev) => {
-                            const newSet = new Set(prev);
-                            newSet.add(currentStep);
-                            return newSet;
-                        });
+                        setCompletedSteps(completedSteps.add(currentStep));
                     }
                 }
                 // No element set for this step? Place the pointer at the center of the screen
