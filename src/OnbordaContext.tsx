@@ -37,7 +37,7 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
 
    // Start the active tour on mount
     useEffect(() => {
-        if (activeTour) {
+        if (activeTour && currentTour === null) {
             startOnborda(activeTour);
         }
     }, [activeTour]);
@@ -106,6 +106,7 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
     }, [tours]);
 
     const startOnborda = useCallback((tourName: string) => {
+        closeOnborda(); // Reset the current tour
         setCurrentTour(tourName);
     }, [setCurrentTour]);
 

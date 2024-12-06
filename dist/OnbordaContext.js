@@ -24,7 +24,7 @@ const OnbordaProvider = ({ children, tours = [], activeTour = null, }) => {
     const [completedSteps, setCompletedSteps] = useState(new Set());
     // Start the active tour on mount
     useEffect(() => {
-        if (activeTour) {
+        if (activeTour && currentTour === null) {
             startOnborda(activeTour);
         }
     }, [activeTour]);
@@ -87,6 +87,7 @@ const OnbordaProvider = ({ children, tours = [], activeTour = null, }) => {
         });
     }, [tours]);
     const startOnborda = useCallback((tourName) => {
+        closeOnborda(); // Reset the current tour
         setCurrentTour(tourName);
     }, [setCurrentTour]);
     return (_jsx(OnbordaContext.Provider, { value: {
