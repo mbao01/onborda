@@ -6,6 +6,8 @@ export interface OnbordaProviderProps {
     tours: Tour[];
     /** Active Tour */
     activeTour?: string;
+    /** Initial isOnbordaVisible state */
+    defaultIsOnbordaVisible?: boolean;
 }
 export interface OnbordaContextType {
     /** array of tours */

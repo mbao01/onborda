@@ -28,6 +28,7 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
   children,
   tours = [],
   activeTour = null,
+  defaultIsOnbordaVisible = true,
 }) => {
   const [currentTour, setCurrentTourState] = useState<string | null>(null);
   const [currentStep, setCurrentStepState] = useState(0);
@@ -54,11 +55,9 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
     if (delay) {
       setTimeout(() => {
         setCurrentStepState(step);
-        setOnbordaVisible(true);
       }, delay);
     } else {
       setCurrentStepState(step);
-      setOnbordaVisible(true);
     }
   }, []);
 
@@ -101,7 +100,7 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
         setCurrentTourStepsState(tour?.steps || []);
         tour && initializeCompletedSteps(tour).then(r => {
             setCurrentStep(r);
-            setOnbordaVisible(true);
+            setOnbordaVisible(defaultIsOnbordaVisible);
         });
     }, [tours]);
 

@@ -8,6 +8,8 @@ export interface OnbordaProviderProps {
     tours: Tour[];
     /** Active Tour */
     activeTour?: string;
+    /** Initial isOnbordaVisible state */
+    defaultIsOnbordaVisible?: boolean;
 }
 
 // Context

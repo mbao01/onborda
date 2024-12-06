@@ -16,7 +16,7 @@ const useOnborda = () => {
     }
     return context;
 };
-const OnbordaProvider = ({ children, tours = [], activeTour = null, }) => {
+const OnbordaProvider = ({ children, tours = [], activeTour = null, defaultIsOnbordaVisible = true, }) => {
     const [currentTour, setCurrentTourState] = useState(null);
     const [currentStep, setCurrentStepState] = useState(0);
     const [isOnbordaVisible, setOnbordaVisible] = useState(false);
@@ -40,12 +40,10 @@ const OnbordaProvider = ({ children, tours = [], activeTour = null, }) => {
         if (delay) {
             setTimeout(() => {
                 setCurrentStepState(step);
-                setOnbordaVisible(true);
             }, delay);
         }
         else {
             setCurrentStepState(step);
-            setOnbordaVisible(true);
         }
     }, []);
     const closeOnborda = useCallback(() => {
@@ -83,7 +81,7 @@ const OnbordaProvider = ({ children, tours = [], activeTour = null, }) => {
         setCurrentTourStepsState(tour?.steps || []);
         tour && initializeCompletedSteps(tour).then(r => {
             setCurrentStep(r);
-            setOnbordaVisible(true);
+            setOnbordaVisible(defaultIsOnbordaVisible);
         });
     }, [tours]);
     const startOnborda = useCallback((tourName) => {
