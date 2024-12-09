@@ -98,6 +98,7 @@ export interface OnbordaProps {
     /** @deprecated Use `OnbordaProvider.tours` instead */
     steps?: Tour[];
     /** Flag to show or hide the Onborda component */
+    /** @deprecated Use `OnbordaProvider.defaultIsOnbordaVisible` instead */
     showOnborda?: boolean;
     /** RGB value for the shadow color */
     shadowRgb?: string;

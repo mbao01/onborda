@@ -183,12 +183,17 @@ const tour : Tour = {
 | `interactable`         | `boolean`                                | Optional. Determines whether the user can interact with the target element.                                                                                                                 |
 | `isCompleteConditions` | `(element: Element) => boolean`          | Optional. A client function that returns a boolean. If true, the step is marked as completed. Called when the user interacts with the target element.                                       |
 | `onComplete`           | `() => void`                             | Optional. A client function that is called when the step is marked as completed. Called if `isCompleteConditions` returns true.                                                             |
+| `observerSelector`     | `string`                                 | Optional. A querySelector string used to target an Element/s that this step refers to. Each element found will have a MutationObserver attached with a callback to `isCompleteConditions`.  |
 | `[key: string]`        | `any`                                    | Optional. Any additional properties you wish to add. Will be available in the `useOnborda` hook as well as the Card component.                                                              |
 | <del>`nextRoute`</del> | <del>`string`</del>                      | **Deprecated**.  <del>Optional. The route to navigate to using `next/navigation` when moving to the next step.</del>                                                                        |
 | <del>`prevRoute`</del> | <del>`string`</del>                      | **Deprecated**.  <del>Optional. The route to navigate to using `next/navigation` when moving to the previous step.</del>                                                                    |
 
 > [!IMPORTANT]
 > The `nextRoute` and `prevRoute` properties have been deprecated. Please use the `route` property instead.
+
+> [!TIP]
+> Each Element found by `observerSelector` will have a `data-onborda-observed` attribute set to `true` when the observer is attached. This can be used to target the observed elements in your Tailwind classes for styling. EG `data-[onborda-observed=true]:outline-warning` will add a yellow outline to the observed elements.
+
 ```tsx
 const step: Step = {
     icon: <>👋</>,
@@ -287,11 +292,12 @@ export async function FirstTourInitialState() {
 }
 ```
 ### OnbordaProvider Props
-| Property           | Type                 | Description                                                                         |
-|--------------------|----------------------|-------------------------------------------------------------------------------------|
-| `children`         | `React.ReactNode`    | Your website or application content.                                                |
-| `tours`            | `Tour[]`             | An array of `Tour` objects defining each tour of the onboarding process.            |
-| `activeTour`       | `string`             | Optional. The id of the active tour. If set, Onborda will start tour automatically. |
+| Property                  | Type              | Description                                                                                |
+|---------------------------|-------------------|--------------------------------------------------------------------------------------------|
+| `children`                | `React.ReactNode` | Your website or application content.                                                       |
+| `tours`                   | `Tour[]`          | An array of `Tour` objects defining each tour of the onboarding process.                   |
+| `activeTour`              | `string`          | Optional. The id of the active tour. If set, Onborda will start tour automatically.        |
+| `defaultIsOnbordaVisible` | `boolean`         | Optional. Controls the visibility of the onboarding overlay on mount. Defaults to `false`. |
 
 ```tsx
 <OnbordaProvider tours={tours}>
@@ -301,26 +307,25 @@ export async function FirstTourInitialState() {
 
 ### Onborda Props
 
-| Property           | Type                 | Description                                                                                                                                                                                                                                                                         |
-|--------------------|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `children`         | `React.ReactNode`    | Your website or application content.                                                                                                                                                                                                                                                |
-| `showOnborda`      | `boolean`            | Optional. Controls the visibility of the onboarding overlay, eg. if the user is a first time visitor. Defaults to `false`.                                                                                                                                                          |
-| `shadowRgb`        | `string`             | Optional. The RGB values for the shadow color surrounding the target area. Defaults to black `"0,0,0"`.                                                                                                                                                                             |
-| `shadowOpacity`    | `string`             | Optional. The opacity value for the shadow surrounding the target area. Defaults to `"0.2"`                                                                                                                                                                                         |
-| `cardTransition`   | `Transition`         | Transitions between steps are of the type Transition from [framer-motion](https://www.framer.com/motion/transition/), see the [transition docs](https://www.framer.com/motion/transition/) for more info. Example: `{{ type: "spring" }}`.                                          |
-| `cardComponent`    | `React.ReactNode`    | The React component to use as the card for each step.                                                                                                                                                                                                                               |
-| `tourComponent`    | `React.ReactNode`    | The React component to use as a list of steps for the current tour.                                                                                                                                                                                                                 |
-| `debug`            | `boolean`            | Optional. Console logs the current step and the target element. Defaults to `false`.                                                                                                                                                                                                |
-| `observerTimeout`  | `number`             | Optional. The timeout in milliseconds for the observer to wait for the target element to be available. Defaults to `5000`. Observer is used to wait for the target element to be available before proceeding to the next step e.g. when the target element is on a different route. |
-| <del>`steps`</del> | <del>`Array[]`</del> | **Deprecated** <del>An array of `Step` objects defining each step of the onboarding process.</del>                                                                                                                                                                                  |
+| Property                 | Type                 | Description                                                                                                                                                                                                                                                                         |
+|--------------------------|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `children`               | `React.ReactNode`    | Your website or application content.                                                                                                                                                                                                                                                |
+| `shadowRgb`              | `string`             | Optional. The RGB values for the shadow color surrounding the target area. Defaults to black `"0,0,0"`.                                                                                                                                                                             |
+| `shadowOpacity`          | `string`             | Optional. The opacity value for the shadow surrounding the target area. Defaults to `"0.2"`                                                                                                                                                                                         |
+| `cardTransition`         | `Transition`         | Transitions between steps are of the type Transition from [framer-motion](https://www.framer.com/motion/transition/), see the [transition docs](https://www.framer.com/motion/transition/) for more info. Example: `{{ type: "spring" }}`.                                          |
+| `cardComponent`          | `React.ReactNode`    | The React component to use as the card for each step.                                                                                                                                                                                                                               |
+| `tourComponent`          | `React.ReactNode`    | The React component to use as a list of steps for the current tour.                                                                                                                                                                                                                 |
+| `debug`                  | `boolean`            | Optional. Console logs the current step and the target element. Defaults to `false`.                                                                                                                                                                                                |
+| `observerTimeout`        | `number`             | Optional. The timeout in milliseconds for the observer to wait for the target element to be available. Defaults to `5000`. Observer is used to wait for the target element to be available before proceeding to the next step e.g. when the target element is on a different route. |
+| <del>`showOnborda`</del> | <del>`boolean`</del> | **Deprecated** <del>Optional. Controls the visibility of the onboarding overlay, eg. if the user is a first time visitor. Defaults to `false`.</del>                                                                                                                                |
+| <del>`steps`</del>       | <del>`Array[]`</del> | **Deprecated** <del>An array of `Step` objects defining each step of the onboarding process.</del>                                                                                                                                                                                  |
 
 > [!IMPORTANT]
 > The `steps` property has been deprecated. Please use the `OnbordaProvider.tours` property instead.
+> The `showOnborda` property has been deprecated. Please use the `OnbordaProvider.defaultIsOnbordaVisible` property instead.
 
 ```tsx
 <Onborda
-  steps={steps}
-  showOnborda={true}
   shadowRgb="55,48,163"
   shadowOpacity="0.8"
   cardComponent={CustomCard}
@@ -341,23 +346,26 @@ The `useOnborda` hook provides a set of functions to control the onboarding proc
 | `closeOnborda`     | `() => void`                                          | A function to close the onboarding process.                              |
 | `curreentTour`     | `string`                                              | The name of the current tour.                                            |
 | `currentStep`      | `number`                                              | The index of the current step in the steps array.                        |
-| `currentTourSteps` | `Step[]`                                              | The steps array for the current tour.                                    |
 | `setCurrentStep`   | `(step: number \| string) => void;`                   | A function to set the current step in the onboarding process.            |
+| `currentTourSteps` | `Step[]`                                              | The steps array for the current tour.                                    |
 | `completedSteps`   | `Set<number>`                                         | An array of completed step indexes/ids.                                  |
 | `setCompletedSteps`| `React.Dispatch<React.SetStateAction<Set<number>>>`   | A function to set the completed steps array.                             |
 | `isOnbordaVisible` | `boolean`                                             | A boolean to determine if the onboarding overlay is visible.             |
+| `setOnbordaVisible`| `React.Dispatch<React.SetStateAction<boolean>>`       | A function to set the visibility of the onboarding overlay.              |
 
 ```tsx
 const { 
+    tours,
     startOnborda, 
     closeOnborda, 
     currentTour, 
     currentStep, 
-    currentTourSteps, 
-    setCurrentStep, 
+    setCurrentStep,
+    currentTourSteps,
     completedSteps, 
     setCompletedSteps, 
-    isOnbordaVisible 
+    isOnbordaVisible,
+    setOnbordaVisible
 } = useOnborda();
 ```
 
