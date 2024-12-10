@@ -250,10 +250,12 @@ const Onborda: React.FC<OnbordaProps> = ({
             cleanup.forEach(fn => fn());
         }
     }, [
+        currentTour, // Re-run the effect when the current tour changes
         currentStep, // Re-run the effect when the current step changes
         currentTourSteps, // Re-run the effect when the current tour steps change
         isOnbordaVisible, // Re-run the effect when the onborda visibility changes
         currentRoute, // Re-run the effect when the current route changes
+        completedSteps, // Re-run the effect when the completed steps change
     ]);
 
     // - -

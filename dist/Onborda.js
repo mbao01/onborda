@@ -211,10 +211,12 @@ const Onborda = ({ children, shadowRgb = "0, 0, 0", shadowOpacity = "0.2", cardT
             cleanup.forEach(fn => fn());
         };
     }, [
+        currentTour, // Re-run the effect when the current tour changes
         currentStep, // Re-run the effect when the current step changes
         currentTourSteps, // Re-run the effect when the current tour steps change
         isOnbordaVisible, // Re-run the effect when the onborda visibility changes
         currentRoute, // Re-run the effect when the current route changes
+        completedSteps, // Re-run the effect when the completed steps change
     ]);
     // - -
     // Helper function to get element position
