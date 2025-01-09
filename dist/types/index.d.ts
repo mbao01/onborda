@@ -23,7 +23,7 @@ export interface OnbordaContextType {
     /** function to close Onborda */
     closeOnborda: () => void;
     /** function to start Onborda */
-    startOnborda: (tourName: string) => void;
+    startOnborda: (tourName: string, visible?: boolean, step?: number | string) => void;
     /** flag to check if Onborda is visible */
     isOnbordaVisible: boolean;
     /** function to set the visibility of Onborda */

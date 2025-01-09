@@ -339,19 +339,19 @@ export async function FirstTourInitialState() {
 ### UseOnborda Context
 The `useOnborda` hook provides a set of functions to control the onboarding process from any child within the `OnboardaProvider`. The hook returns an object with the following properties:
 
-| Property           | Type                                                  | Description                                                              |
-|--------------------|-------------------------------------------------------|--------------------------------------------------------------------------|
-| `tours`            | `Tour[]`                                              | An array of `Tour` objects defining each tour of the onboarding process. |
-| `startOnborda`     | `() => void`                                          | A function to start the onboarding process.                              |
-| `closeOnborda`     | `() => void`                                          | A function to close the onboarding process.                              |
-| `curreentTour`     | `string`                                              | The name of the current tour.                                            |
-| `currentStep`      | `number`                                              | The index of the current step in the steps array.                        |
-| `setCurrentStep`   | `(step: number \| string) => void;`                   | A function to set the current step in the onboarding process.            |
-| `currentTourSteps` | `Step[]`                                              | The steps array for the current tour.                                    |
-| `completedSteps`   | `Set<number>`                                         | An array of completed step indexes/ids.                                  |
-| `setCompletedSteps`| `React.Dispatch<React.SetStateAction<Set<number>>>`   | A function to set the completed steps array.                             |
-| `isOnbordaVisible` | `boolean`                                             | A boolean to determine if the onboarding overlay is visible.             |
-| `setOnbordaVisible`| `React.Dispatch<React.SetStateAction<boolean>>`       | A function to set the visibility of the onboarding overlay.              |
+| Property           | Type                                                                     | Description                                                                                                                                              |
+|--------------------|--------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `tours`            | `Tour[]`                                                                 | An array of `Tour` objects defining each tour of the onboarding process.                                                                                 |
+| `startOnborda`     | `(tourName: string, visible?: boolean, step?: number \| string) => void` | A function to start the onboarding process. [visible] defaults to OnbordaProvider.defaultIsOnbordaVisible. [step] defaults to the first incomplete step. |
+| `closeOnborda`     | `() => void`                                                             | A function to close the onboarding process.                                                                                                              |
+| `curreentTour`     | `string`                                                                 | The name of the current tour.                                                                                                                            |
+| `currentStep`      | `number`                                                                 | The index of the current step in the steps array.                                                                                                        |
+| `setCurrentStep`   | `(step: number \| string) => void;`                                      | A function to set the current step in the onboarding process.                                                                                            |
+| `currentTourSteps` | `Step[]`                                                                 | The steps array for the current tour.                                                                                                                    |
+| `completedSteps`   | `Set<number>`                                                            | An array of completed step indexes/ids.                                                                                                                  |
+| `setCompletedSteps`| `React.Dispatch<React.SetStateAction<Set<number>>>`                      | A function to set the completed steps array.                                                                                                             |
+| `isOnbordaVisible` | `boolean`                                                                | A boolean to determine if the onboarding overlay is visible.                                                                                             |
+| `setOnbordaVisible`| `React.Dispatch<React.SetStateAction<boolean>>`                          | A function to set the visibility of the onboarding overlay.                                                                                              |
 
 ```tsx
 const { 

@@ -90,7 +90,7 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
 
     },[currentTour]);
 
-    const setCurrentTour = useCallback((tourName: string | null) => {
+    const setCurrentTour = useCallback((tourName: string | null, visible: boolean | undefined, initStep: number | string | undefined) => {
         if (!tourName) {
             closeOnborda();
             return
@@ -99,14 +99,14 @@ const OnbordaProvider: React.FC<OnbordaProviderProps> = ({
         const tour = tours.find((tour) => tour.tour === tourName)
         setCurrentTourStepsState(tour?.steps || []);
         tour && initializeCompletedSteps(tour).then(r => {
-            setCurrentStep(r);
-            setOnbordaVisible(defaultIsOnbordaVisible);
+            setCurrentStep(initStep ?? r);
+            setOnbordaVisible(visible ?? defaultIsOnbordaVisible);
         });
     }, [tours]);
 
-    const startOnborda = useCallback((tourName: string) => {
+    const startOnborda = useCallback((tourName: string, visible?: boolean, step?: number | string) => {
         closeOnborda(); // Reset the current tour
-        setCurrentTour(tourName);
+        setCurrentTour(tourName, visible, step);
     }, [setCurrentTour]);
 
 

@@ -71,7 +71,7 @@ const OnbordaProvider = ({ children, tours = [], activeTour = null, defaultIsOnb
         // If all steps are completed, return the last step
         return firstIncomplete === -1 ? tour.steps.length - 1 : firstIncomplete;
     }, [currentTour]);
-    const setCurrentTour = useCallback((tourName) => {
+    const setCurrentTour = useCallback((tourName, visible, initStep) => {
         if (!tourName) {
             closeOnborda();
             return;
@@ -80,13 +80,13 @@ const OnbordaProvider = ({ children, tours = [], activeTour = null, defaultIsOnb
         const tour = tours.find((tour) => tour.tour === tourName);
         setCurrentTourStepsState(tour?.steps || []);
         tour && initializeCompletedSteps(tour).then(r => {
-            setCurrentStep(r);
-            setOnbordaVisible(defaultIsOnbordaVisible);
+            setCurrentStep(initStep ?? r);
+            setOnbordaVisible(visible ?? defaultIsOnbordaVisible);
         });
     }, [tours]);
-    const startOnborda = useCallback((tourName) => {
+    const startOnborda = useCallback((tourName, visible, step) => {
         closeOnborda(); // Reset the current tour
-        setCurrentTour(tourName);
+        setCurrentTour(tourName, visible, step);
     }, [setCurrentTour]);
     return (_jsx(OnbordaContext.Provider, { value: {
             tours,
