@@ -109,36 +109,38 @@ const Onborda: React.FC<OnbordaProps> = ({
                             const htmlElement = element as HTMLElement;
                             htmlElement.style.pointerEvents = "auto";
 
-                            // If the step has complete conditions, we need to observe the element for changes
-                            if (step?.isCompleteConditions) {
-                                // Check if the step has an observer selector, if not, use the focused element itself
-                                const eventListenerElements = step?.observerSelector ? document.querySelectorAll(step.observerSelector) : [element];
-                                const htmlElements = Array.from(eventListenerElements) as HTMLElement[];
+                            // Check if the step has an observer selector, if not, use the focused element itself
+                            const eventListenerElements = step?.observerSelector ? document.querySelectorAll(step.observerSelector) : [element];
+                            const htmlElements = Array.from(eventListenerElements) as HTMLElement[];
 
-                                //create observer to check if the element to focus has changed
-                                const observer = new MutationObserver((mutations, observer) => {
-                                    debug && console.log("Onborda: Observer interaction Mutation", mutations);
+                            //create observer to check if the element to focus has changed
+                            const observer = new MutationObserver((mutations, observer) => {
+                                debug && console.log("Onborda: Observer interaction Mutation", mutations);
+                                // If there are mutations, update the pointer position
+                                updatePointerPosition();
+                                // does this step have conditions to be met?
+                                if (step?.isCompleteConditions) {
                                     handleInteraction();
-                                });
+                                }
+                            });
 
-                                //add the observer to the elements
-                                htmlElements.forEach((el) => {
-                                    debug && console.log("Onborda: Observer added to element", el);
-                                    //add data attribute to the element
-                                    el.setAttribute("data-onborda-observed", "true");
-                                    //assign the observer to the element
-                                    observer.observe(el, {
-                                        childList: true,
-                                        subtree: true,
-                                    });
-                                    //cleanup the observer
-                                    cleanup.push(() => {
-                                        debug && console.log("Onborda: Observer disconnected from element", el);
-                                        el.removeAttribute("data-onborda-observed");
-                                        observer.disconnect();
-                                    });
-                                })
-                            }
+                            //add the observer to the elements
+                            htmlElements.forEach((el) => {
+                                debug && console.log("Onborda: Observer added to element", el);
+                                //add data attribute to the element
+                                el.setAttribute("data-onborda-observed", "true");
+                                //assign the observer to the element
+                                observer.observe(el, {
+                                    childList: true,
+                                    subtree: true,
+                                });
+                                //cleanup the observer
+                                cleanup.push(() => {
+                                    debug && console.log("Onborda: Observer disconnected from element", el);
+                                    el.removeAttribute("data-onborda-observed");
+                                    observer.disconnect();
+                                });
+                            })
 
                         }
                         elementFound = true;
