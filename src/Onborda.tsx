@@ -318,7 +318,11 @@ const Onborda: React.FC<OnbordaProps> = ({
     useEffect(() => {
         if (isOnbordaVisible) {
             window.addEventListener("resize", updatePointerPosition);
-            return () => window.removeEventListener("resize", updatePointerPosition);
+            window.addEventListener("scroll", updatePointerPosition);
+            return () => {
+                window.removeEventListener("resize", updatePointerPosition);
+                window.removeEventListener("scroll", updatePointerPosition);
+            }
         }
     }, [currentStep, currentTourSteps, isOnbordaVisible]);
 
