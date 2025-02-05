@@ -24,7 +24,7 @@ const Onborda: React.FC<OnbordaProps> = ({
     debug = false,
     observerTimeout = 5000,
 }: OnbordaProps) => {
-    const {currentTour, currentStep, setCurrentStep, isOnbordaVisible, currentTourSteps, completedSteps, setCompletedSteps, tours, closeOnborda} = useOnborda();
+    const {currentTour, currentStep, setCurrentStep, isOnbordaVisible, currentTourSteps, completedSteps, setCompletedSteps, tours, closeOnborda, setOnbordaVisible} = useOnborda();
 
     const [elementToScroll, setElementToScroll] = useState<Element | null>(null);
     const [pointerPosition, setPointerPosition] = useState<{
@@ -49,7 +49,7 @@ const Onborda: React.FC<OnbordaProps> = ({
         return step?.selector ? document.querySelector(step.selector) : step?.customQuerySelector ? step.customQuerySelector() : null;
     }
 
-   // Get the current tour object
+    // Get the current tour object
     const currentTourObject = useMemo(() => {
         return tours.find((tour) => tour.tour === currentTour);
     }, [currentTour, isOnbordaVisible]);
@@ -58,12 +58,12 @@ const Onborda: React.FC<OnbordaProps> = ({
     // Update the current route on route changes
     useEffect(() => {
         !pendingRouteChange && setCurrentRoute(path);
-    },[path, pendingRouteChange])
+    }, [path, pendingRouteChange])
 
     // - -
     // Initialisze
     useEffect(() => {
-        let cleanup : any[] = [];
+        let cleanup: any[] = [];
         if (isOnbordaVisible && currentTourSteps) {
             debug && console.log("Onborda: Current Step Changed", currentStep, completedSteps);
             const step = currentTourSteps[currentStep];
@@ -90,7 +90,7 @@ const Onborda: React.FC<OnbordaProps> = ({
                                 debug && console.log("Onborda: Step Completed", currentStep, step);
                                 step?.onComplete && step.onComplete();
                                 setCompletedSteps(completedSteps.add(currentStep));
-                            }else if (!isComplete && completedSteps.has(currentStep)) {
+                            } else if (!isComplete && completedSteps.has(currentStep)) {
                                 debug && console.log("Onborda: Step Incomplete", currentStep, step);
                                 setCompletedSteps((prev) => {
                                     prev.delete(currentStep);
@@ -207,13 +207,13 @@ const Onborda: React.FC<OnbordaProps> = ({
                             };
                         }
                     }
-                }else {
+                } else {
                     // no selector, but might still need to navigate to a route
                     if (step.route && (currentRoute == null || !currentRoute?.endsWith(step.route))) {
                         // Trigger the next route
                         debug && console.log("Onborda: Navigating to route", step.route);
                         router.push(step.route);
-                    }else if (!completedSteps.has(currentStep)) {
+                    } else if (!completedSteps.has(currentStep)) {
                         // don't have a route to navigate to, but the step is not completed
                         debug && console.log("Onborda: Step Completed via no selector", currentStep, step);
                         step?.onComplete && step.onComplete();
@@ -384,7 +384,7 @@ const Onborda: React.FC<OnbordaProps> = ({
         </div>
 
         {/* Onborda Overlay Step Content */}
-        {pointerPosition && isOnbordaVisible && CardComponent && (
+        {pointerPosition && isOnbordaVisible && CardComponent && currentTourObject && (
             <Portal>
                 <motion.div
                     data-name="onborda-overlay"
@@ -433,12 +433,14 @@ const Onborda: React.FC<OnbordaProps> = ({
                         >
                             <CardComponent
                                 step={currentTourSteps?.[currentStep]!}
+                                tour={currentTourObject}
                                 currentStep={currentStep}
                                 totalSteps={currentTourSteps?.length ?? 0}
                                 nextStep={nextStep}
                                 prevStep={prevStep}
                                 setStep={setStep}
                                 closeOnborda={closeOnborda}
+                                setOnbordaVisible={setOnbordaVisible}
                                 arrow={<CardArrow isVisible={currentTourSteps?.[currentStep] ? hasSelector(currentTourSteps?.[currentStep]) : false}/>}
                                 completedSteps={Array.from(completedSteps)}
                                 pendingRouteChange={pendingRouteChange}
@@ -446,7 +448,7 @@ const Onborda: React.FC<OnbordaProps> = ({
                         </div>
                     </motion.div>
                 </motion.div>
-                {TourComponent && currentTourObject !== undefined && (
+                {TourComponent && (
                     <motion.div
                         data-name={'onborda-tour-wrapper'}
                         className={'fixed top-0 left-0 z-[998] w-screen h-screen pointer-events-none'}

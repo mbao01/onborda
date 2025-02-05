@@ -151,6 +151,9 @@ export interface CardComponentProps {
     /** The current step object containing details of the step */
     step: Step;
 
+    /** The current tour object containing details of the tour */
+    tour: Tour;
+
     /** The index of the current step */
     currentStep: number;
 
@@ -168,6 +171,9 @@ export interface CardComponentProps {
 
     /** Function to close the Onborda */
     closeOnborda: () => void;
+
+    /** Function to set the tour visibility */
+    setOnbordaVisible: (visible: boolean) => void;
 
     /** The arrow element to be displayed in the card */
     arrow: JSX.Element;

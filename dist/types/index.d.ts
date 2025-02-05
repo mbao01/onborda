@@ -118,6 +118,8 @@ export interface OnbordaProps {
 export interface CardComponentProps {
     /** The current step object containing details of the step */
     step: Step;
+    /** The current tour object containing details of the tour */
+    tour: Tour;
     /** The index of the current step */
     currentStep: number;
     /** The total number of steps in the tour */
@@ -130,6 +132,8 @@ export interface CardComponentProps {
     prevStep: () => void;
     /** Function to close the Onborda */
     closeOnborda: () => void;
+    /** Function to set the tour visibility */
+    setOnbordaVisible: (visible: boolean) => void;
     /** The arrow element to be displayed in the card */
     arrow: JSX.Element;
     /** Array of completed steps */

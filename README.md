@@ -48,13 +48,15 @@ If you require greater control over the card design or simply wish to create a t
 
 | Prop                 | Type                                | Description                                                                                   |
 |----------------------|-------------------------------------|-----------------------------------------------------------------------------------------------|
-| `step`               | `Object`                            | The current `Step` object from your steps array, including content, title, etc.               |
+| `step`               | `Step`                              | The current `Step` object from your steps array, including content, title, etc.               |
+| `tour`               | `Tour`                              | The current `Tour` object from your tours array, including title, description, etc.           |
 | `currentStep`        | `number`                            | The index of the current step in the steps array.                                             |
 | `totalSteps`         | `number`                            | The total number of steps in the onboarding process.                                          |
 | `setStep`            | `(step: number \| string) => void;` | A function to set the current step in the onboarding process.                                 |
 | `nextStep`           | `() => void`                        | A function to advance to the next step in the onboarding process.                             |
 | `prevStep`           | `() => void`                        | A function to go back to the previous step in the onboarding process.                         |
 | `closeOnborda`       | `() => void`                        | A function to close the onboarding process.                                                   |
+| `setOnbordaVisible`  | `(visible: boolean) => void`        | A function to set the visibility of the onboarding overlay.                                   |
 | `arrow`              | `JSX.Element`                       | An SVG object, the orientation is controlled by the steps side prop                           |
 | `completedSteps`     | `number[]`                          | An array of completed step indexes/ids.                                                       |
 | `pendingRouteChange` | `boolean`                           | A boolean to determine if a route change is pending. Only set if the step has a selector set. |
