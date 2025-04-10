@@ -388,7 +388,7 @@ const Onborda: React.FC<OnbordaProps> = ({
             <Portal>
                 <motion.div
                     data-name="onborda-overlay"
-                    className="absolute inset-0 pointer-events-none z-[997]"
+                    className="absolute inset-0 pointer-events-none z-30"
                     initial="hidden"
                     animate={isOnbordaVisible ? "visible" : "hidden"}
                     variants={variants}
@@ -396,7 +396,7 @@ const Onborda: React.FC<OnbordaProps> = ({
                 >
                     <motion.div
                         data-name="onborda-pointer"
-                        className="relative z-[998]"
+                        className="relative z-40"
                         style={{
                             boxShadow: `0 0 200vw 200vh rgba(${shadowRgb}, ${shadowOpacity})`,
                             borderRadius: `${pointerRadius}px ${pointerRadius}px ${pointerRadius}px ${pointerRadius}px`,
@@ -425,7 +425,7 @@ const Onborda: React.FC<OnbordaProps> = ({
                     >
                         {/* Card */}
                         <div
-                            className="absolute flex flex-col max-w-[100%] transition-all min-w-min pointer-events-auto z-[999]"
+                            className="absolute flex flex-col max-w-[100%] transition-all min-w-min pointer-events-auto z-50"
                             data-name="onborda-card"
                             style={getCardStyle(
                                 currentTourSteps?.[currentStep]?.side as any
@@ -451,7 +451,7 @@ const Onborda: React.FC<OnbordaProps> = ({
                 {TourComponent && (
                     <motion.div
                         data-name={'onborda-tour-wrapper'}
-                        className={'fixed top-0 left-0 z-[998] w-screen h-screen pointer-events-none'}
+                        className={'fixed top-0 left-0 z-40 w-screen h-screen pointer-events-none'}
                     >
                         <motion.div
                             data-name={'onborda-tour'}
