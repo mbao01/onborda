@@ -6,6 +6,9 @@
 .pnp.js
 .yarn/install-state.gz
 
+# build
+/dist
+
 # misc
 .DS_Store
 *.pem
