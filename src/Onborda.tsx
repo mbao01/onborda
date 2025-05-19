@@ -451,7 +451,7 @@ const Onborda: React.FC<OnbordaProps> = ({
           <Portal>
             <motion.div
               data-name="onborda-overlay"
-              className="absolute inset-0 pointer-events-none z-30"
+              className="absolute inset-0 pointer-events-none z-50"
               initial="hidden"
               animate={isOnbordaVisible ? "visible" : "hidden"}
               variants={variants}
@@ -459,7 +459,7 @@ const Onborda: React.FC<OnbordaProps> = ({
             >
               <motion.div
                 data-name="onborda-pointer"
-                className="relative z-40"
+                className="relative z-50"
                 style={{
                   boxShadow: `0 0 200vw 200vh rgba(${shadowRgb}, ${shadowOpacity})`,
                   borderRadius: `${pointerRadius}px ${pointerRadius}px ${pointerRadius}px ${pointerRadius}px`,
