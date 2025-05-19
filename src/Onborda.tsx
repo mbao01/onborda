@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useOnborda } from "./OnbordaContext";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import { Portal } from "@radix-ui/react-portal";
 
