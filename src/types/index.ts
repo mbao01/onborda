@@ -139,12 +139,6 @@ export interface OnbordaProps {
   /** @deprecated Use `OnbordaProvider.defaultIsOnbordaVisible` instead */
   showOnborda?: boolean;
 
-  /** RGB value for the shadow color */
-  shadowRgb?: string;
-
-  /** Opacity value for the shadow */
-  shadowOpacity?: string;
-
   /** Transition settings for the card component */
   cardTransition?: Transition;
 

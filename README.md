@@ -312,8 +312,6 @@ export async function FirstTourInitialState() {
 | Property                 | Type                 | Description                                                                                                                                                                                                                                                                         |
 |--------------------------|----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `children`               | `React.ReactNode`    | Your website or application content.                                                                                                                                                                                                                                                |
-| `shadowRgb`              | `string`             | Optional. The RGB values for the shadow color surrounding the target area. Defaults to black `"0,0,0"`.                                                                                                                                                                             |
-| `shadowOpacity`          | `string`             | Optional. The opacity value for the shadow surrounding the target area. Defaults to `"0.2"`                                                                                                                                                                                         |
 | `cardTransition`         | `Transition`         | Transitions between steps are of the type Transition from [motion/react](https://motion.dev/docs/react-transitions), see the [transition docs](https://motion.dev/docs/react-transitions) for more info. Example: `{{ type: "spring" }}`.                                          |
 | `cardComponent`          | `React.ReactNode`    | The React component to use as the card for each step.                                                                                                                                                                                                                               |
 | `tourComponent`          | `React.ReactNode`    | The React component to use as a list of steps for the current tour.                                                                                                                                                                                                                 |
@@ -328,8 +326,6 @@ export async function FirstTourInitialState() {
 
 ```tsx
 <Onborda
-  shadowRgb="55,48,163"
-  shadowOpacity="0.8"
   cardComponent={CustomCard}
   tourComponent={CustomTour}
   cardTransition={{ duration: 2, type: "tween" }}

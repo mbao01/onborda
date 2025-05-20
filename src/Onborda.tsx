@@ -18,8 +18,6 @@ import { getCardStyle, getArrowStyle } from "./OnbordaStyles";
 const Onborda: React.FC<OnbordaProps> = ({
   classes,
   children,
-  shadowRgb = "0, 0, 0",
-  shadowOpacity = "0.2",
   cardTransition = { ease: "anticipate", duration: 0.6 },
   cardComponent: CardComponent,
   tourComponent: TourComponent,
@@ -470,7 +468,6 @@ const Onborda: React.FC<OnbordaProps> = ({
                   data-name="onborda-pointer"
                   className={cn("relative z-50", classes?.pointer)}
                   style={{
-                    boxShadow: `0 0 200vw 200vh rgba(${shadowRgb}, ${shadowOpacity})`,
                     borderRadius: `${pointerRadius}px ${pointerRadius}px ${pointerRadius}px ${pointerRadius}px`,
                   }}
                   initial={
