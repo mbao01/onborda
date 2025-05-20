@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useOnborda } from "./OnbordaContext";
-import { motion } from "motion/react";
+import { motion, MotionConfig } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import { Portal } from "@radix-ui/react-portal";
 
@@ -449,98 +449,98 @@ const Onborda: React.FC<OnbordaProps> = ({
         CardComponent &&
         currentTourObject && (
           <Portal>
-            <motion.div
-              data-name="onborda-overlay"
-              className="absolute inset-0 pointer-events-none z-50"
-              initial="hidden"
-              animate={isOnbordaVisible ? "visible" : "hidden"}
-              variants={variants}
-              transition={{ duration: 0.5 }}
-            >
+            <MotionConfig reducedMotion="user">
               <motion.div
-                data-name="onborda-pointer"
-                className="relative z-50"
-                style={{
-                  boxShadow: `0 0 200vw 200vh rgba(${shadowRgb}, ${shadowOpacity})`,
-                  borderRadius: `${pointerRadius}px ${pointerRadius}px ${pointerRadius}px ${pointerRadius}px`,
-                }}
-                initial={
-                  pointerPosition
-                    ? {
-                        x: pointerPosition.x - pointerPadOffset,
-                        y: pointerPosition.y - pointerPadOffset,
-                        width: pointerPosition.width + pointerPadding,
-                        height: pointerPosition.height + pointerPadding,
-                      }
-                    : {}
-                }
-                animate={
-                  pointerPosition
-                    ? {
-                        x: pointerPosition.x - pointerPadOffset,
-                        y: pointerPosition.y - pointerPadOffset,
-                        width: pointerPosition.width + pointerPadding,
-                        height: pointerPosition.height + pointerPadding,
-                      }
-                    : {}
-                }
-                transition={cardTransition}
-              >
-                {/* Card */}
-                <div
-                  className="absolute flex flex-col max-w-[100%] transition-all min-w-min pointer-events-auto z-50"
-                  data-name="onborda-card"
-                  style={getCardStyle(
-                    currentTourSteps?.[currentStep]?.side as any
-                  )}
-                >
-                  <CardComponent
-                    step={currentTourSteps?.[currentStep]!}
-                    tour={currentTourObject}
-                    currentStep={currentStep}
-                    totalSteps={currentTourSteps?.length ?? 0}
-                    nextStep={nextStep}
-                    prevStep={prevStep}
-                    setStep={setStep}
-                    closeOnborda={closeOnborda}
-                    setOnbordaVisible={setOnbordaVisible}
-                    arrow={
-                      <CardArrow
-                        isVisible={
-                          currentTourSteps?.[currentStep]
-                            ? hasSelector(currentTourSteps?.[currentStep])
-                            : false
-                        }
-                      />
-                    }
-                    completedSteps={Array.from(completedSteps)}
-                    pendingRouteChange={pendingRouteChange}
-                  />
-                </div>
-              </motion.div>
-            </motion.div>
-            {TourComponent && (
-              <motion.div
-                data-name={"onborda-tour-wrapper"}
-                className={
-                  "fixed top-0 left-0 z-40 w-screen h-screen pointer-events-none"
-                }
+                data-name="onborda-overlay"
+                className="absolute inset-0 pointer-events-none z-50"
+                initial="hidden"
+                animate={isOnbordaVisible ? "visible" : "hidden"}
+                variants={variants}
+                transition={{ duration: 0.5 }}
               >
                 <motion.div
-                  data-name={"onborda-tour"}
-                  className={"pointer-events-auto"}
+                  data-name="onborda-pointer"
+                  className="relative z-50"
+                  style={{
+                    boxShadow: `0 0 200vw 200vh rgba(${shadowRgb}, ${shadowOpacity})`,
+                    borderRadius: `${pointerRadius}px ${pointerRadius}px ${pointerRadius}px ${pointerRadius}px`,
+                  }}
+                  initial={
+                    pointerPosition
+                      ? {
+                          x: pointerPosition.x - pointerPadOffset,
+                          y: pointerPosition.y - pointerPadOffset,
+                          width: pointerPosition.width + pointerPadding,
+                          height: pointerPosition.height + pointerPadding,
+                        }
+                      : {}
+                  }
+                  animate={
+                    pointerPosition
+                      ? {
+                          x: pointerPosition.x - pointerPadOffset,
+                          y: pointerPosition.y - pointerPadOffset,
+                          width: pointerPosition.width + pointerPadding,
+                          height: pointerPosition.height + pointerPadding,
+                        }
+                      : {}
+                  }
+                  transition={cardTransition}
                 >
-                  <TourComponent
-                    tour={currentTourObject}
-                    currentTour={currentTour}
-                    currentStep={currentStep}
-                    setStep={setStep}
-                    completedSteps={Array.from(completedSteps)}
-                    closeOnborda={closeOnborda}
-                  />
+                  {/* Card */}
+                  <div
+                    className="absolute flex flex-col max-w-[100%] transition-all min-w-min pointer-events-auto z-50"
+                    data-name="onborda-card"
+                    style={getCardStyle(
+                      currentTourSteps?.[currentStep]?.side as any
+                    )}
+                  >
+                    <CardComponent
+                      step={currentTourSteps?.[currentStep]!}
+                      tour={currentTourObject}
+                      currentStep={currentStep}
+                      totalSteps={currentTourSteps?.length ?? 0}
+                      nextStep={nextStep}
+                      prevStep={prevStep}
+                      setStep={setStep}
+                      closeOnborda={closeOnborda}
+                      setOnbordaVisible={setOnbordaVisible}
+                      arrow={
+                        <CardArrow
+                          isVisible={
+                            currentTourSteps?.[currentStep]
+                              ? hasSelector(currentTourSteps?.[currentStep])
+                              : false
+                          }
+                        />
+                      }
+                      completedSteps={Array.from(completedSteps)}
+                      pendingRouteChange={pendingRouteChange}
+                    />
+                  </div>
                 </motion.div>
               </motion.div>
-            )}
+              {TourComponent && (
+                <motion.div
+                  data-name="onborda-tour-wrapper"
+                  className="fixed top-0 left-0 z-40 w-screen h-screen pointer-events-none"
+                >
+                  <motion.div
+                    data-name="onborda-tour"
+                    className="pointer-events-auto"
+                  >
+                    <TourComponent
+                      tour={currentTourObject}
+                      currentTour={currentTour}
+                      currentStep={currentStep}
+                      setStep={setStep}
+                      completedSteps={Array.from(completedSteps)}
+                      closeOnborda={closeOnborda}
+                    />
+                  </motion.div>
+                </motion.div>
+              )}
+            </MotionConfig>
           </Portal>
         )}
     </>
