@@ -159,6 +159,30 @@ export interface OnbordaProps {
 
   /** Timeout value for the observer when observing for the target element */
   observerTimeout?: number;
+
+  /** Classnames for the various parts of onborda */
+  classes?: Partial<{
+    /** Classname for the card arrow */
+    arrow: string;
+
+    /** Classname for the wrapper around the card component */
+    card: string;
+
+    /** Classname for the step selector under focus */
+    pointer: string;
+
+    /** Classname for the wrapper around the tour wrapper */
+    tourWrapper: string;
+
+    /** Classname for the wrapper around the tour component */
+    tour: string;
+
+    /** Classname for the wrapper around the site content i.e children */
+    siteWrapper: string;
+
+    /** Classname for the onborda overlay step content */
+    overlay: string;
+  }>;
 }
 
 // Custom Card

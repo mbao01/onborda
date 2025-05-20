@@ -1,9 +1,10 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useOnborda } from "./OnbordaContext";
-import { motion, MotionConfig } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, MotionConfig } from "motion/react";
 import { Portal } from "@radix-ui/react-portal";
+import { cn } from "@mbao01/common/utilities";
+import { useOnborda } from "./OnbordaContext";
 
 // Types
 import { OnbordaProps, Step } from "./types";
@@ -15,6 +16,7 @@ import { getCardStyle, getArrowStyle } from "./OnbordaStyles";
  * @constructor
  */
 const Onborda: React.FC<OnbordaProps> = ({
+  classes,
   children,
   shadowRgb = "0, 0, 0",
   shadowOpacity = "0.2",
@@ -413,7 +415,7 @@ const Onborda: React.FC<OnbordaProps> = ({
       <svg
         viewBox="0 0 54 54"
         data-name="onborda-arrow"
-        className="absolute w-6 h-6 origin-center"
+        className={cn("absolute w-6 h-6 origin-center", classes?.arrow)}
         style={getArrowStyle(currentTourSteps?.[currentStep]?.side as any)}
       >
         <path id="triangle" d="M27 27L0 0V54L27 27Z" fill="currentColor" />
@@ -439,7 +441,10 @@ const Onborda: React.FC<OnbordaProps> = ({
   return (
     <>
       {/* Container for the Website content */}
-      <div data-name="onborda-site-wrapper" className={` ${pointerEvents} `}>
+      <div
+        data-name="onborda-site-wrapper"
+        className={` ${pointerEvents} ${cn(classes?.siteWrapper)}`}
+      >
         {children}
       </div>
 
@@ -452,7 +457,10 @@ const Onborda: React.FC<OnbordaProps> = ({
             <MotionConfig reducedMotion="user">
               <motion.div
                 data-name="onborda-overlay"
-                className="absolute inset-0 pointer-events-none z-50"
+                className={cn(
+                  "absolute inset-0 pointer-events-none z-50",
+                  classes?.overlay
+                )}
                 initial="hidden"
                 animate={isOnbordaVisible ? "visible" : "hidden"}
                 variants={variants}
@@ -460,7 +468,7 @@ const Onborda: React.FC<OnbordaProps> = ({
               >
                 <motion.div
                   data-name="onborda-pointer"
-                  className="relative z-50"
+                  className={cn("relative z-50", classes?.pointer)}
                   style={{
                     boxShadow: `0 0 200vw 200vh rgba(${shadowRgb}, ${shadowOpacity})`,
                     borderRadius: `${pointerRadius}px ${pointerRadius}px ${pointerRadius}px ${pointerRadius}px`,
@@ -489,7 +497,10 @@ const Onborda: React.FC<OnbordaProps> = ({
                 >
                   {/* Card */}
                   <div
-                    className="absolute flex flex-col max-w-[100%] transition-all min-w-min pointer-events-auto z-50"
+                    className={cn(
+                      "absolute flex flex-col max-w-[100%] transition-all min-w-min pointer-events-auto z-50",
+                      classes?.card
+                    )}
                     data-name="onborda-card"
                     style={getCardStyle(
                       currentTourSteps?.[currentStep]?.side as any
@@ -523,11 +534,14 @@ const Onborda: React.FC<OnbordaProps> = ({
               {TourComponent && (
                 <motion.div
                   data-name="onborda-tour-wrapper"
-                  className="fixed top-0 left-0 z-40 w-screen h-screen pointer-events-none"
+                  className={cn(
+                    "fixed top-0 left-0 z-40 w-screen h-screen pointer-events-none",
+                    classes?.tourWrapper
+                  )}
                 >
                   <motion.div
                     data-name="onborda-tour"
-                    className="pointer-events-auto"
+                    className={cn("pointer-events-auto", classes?.tour)}
                   >
                     <TourComponent
                       tour={currentTourObject}
